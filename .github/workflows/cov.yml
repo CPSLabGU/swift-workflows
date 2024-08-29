@@ -11,7 +11,7 @@ on:
 jobs:
 
   exec-cov:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: slashmo/install-swift@v0.4.0
