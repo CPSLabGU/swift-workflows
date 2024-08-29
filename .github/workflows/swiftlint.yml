@@ -6,7 +6,7 @@ on:
 jobs:
 
   swiftlint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Clone Repo 
@@ -19,3 +19,43 @@ jobs:
         uses: norio-nomura/action-swiftlint@3.2.1
         with:
             args: --strict
+
+  swiftformat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: slashmo/install-swift@v0.4.0
+        with:
+          version: "5.10"
+
+      - name: Install swift-format
+        uses: mipalgu/install-swift-format@main
+        with:
+          ref: 'tags/510.1.0'
+
+      - name: Setup SSH Key
+        run: | 
+          rm -rf ~/.ssh
+          mkdir -m 0700 ~/.ssh
+          echo "${{ secrets.WORKFLOWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.WORKFLOWS_SSH_PUBLIC_KEY }}" > ~/.ssh/id_ed25519.pub
+          chmod 0600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+
+      - name: Clone Repo
+        uses: actions/checkout@v4
+
+      - name: SwiftFormat
+        run: swift-format lint -rs --configuration .swiftformat.json Sources Tests
+  
+  swiftlint-report:
+    runs-on: ubuntu-latest
+    needs: [swiftlint, swiftformat]
+    if: always()
+    steps:
+      - name: All tests ok
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+      - name: Some tests failed
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
