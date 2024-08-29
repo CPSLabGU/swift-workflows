@@ -2,6 +2,11 @@ name: Swift Coverage Test
 
 on:
   workflow_call:
+      inputs:
+        MINIMUM_COVERAGE:
+          required: true
+          description: 'The minimum code coverage percentage required (0 - 100).'
+          type: number
 
 jobs:
 
@@ -36,7 +41,7 @@ jobs:
         uses: mattpolzin/swift-codecov-action@0.7.3
         id: cov
         with:
-          MINIMUM_COVERAGE: 95
+          MINIMUM_COVERAGE: ${{ inputs.MINIMUM_COVERAGE }}
 
       - name: Post Positive Result
         if: ${{ success() }}
