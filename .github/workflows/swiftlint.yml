@@ -30,7 +30,7 @@ jobs:
       - name: Install swift-format
         uses: mipalgu/install-swift-format@main
         with:
-          ref: 'tags/510.1.0'
+          ref: '510.1.0'
 
       - name: Setup SSH Key
         run: | 
