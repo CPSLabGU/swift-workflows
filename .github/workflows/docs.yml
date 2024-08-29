@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: slashmo/install-swift@v0.4.0
-        with:
-          version: "5.10"
-
       - name: Setup SSH Key
         run: | 
             rm -rf ~/.ssh
@@ -29,7 +25,7 @@ jobs:
       - name: Generate Documentation
         uses: mipalgu/swiftpm-generate-documentation@main
         with:
-            swift-version: "5.10"
+            swift-version: "5.9"
 
       - name: Pages Deployment
         uses: peaceiris/actions-gh-pages@v3
