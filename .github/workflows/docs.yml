@@ -24,7 +24,7 @@ jobs:
             ssh-add ~/.ssh/id_ed25519
 
       - name: Clone Repo 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Generate Documentation
         uses: mipalgu/swiftpm-generate-documentation@main
