@@ -26,9 +26,9 @@ jobs:
   build_macos:
     strategy:
       matrix:
-        os: ${{ fromJSON(github.event.inputs.os) }}
-        build_mode: ${{ fromJSON(github.event.inputs.build_modes) }}
-        swift_version: ${{ fromJSON(github.event.inputs.swift_versions) }}
+        os: ${{ fromJSON(inputs.os) }}
+        build_mode: ${{ fromJSON(inputs.build_modes) }}
+        swift_version: ${{ fromJSON(inputs.swift_versions) }}
     name: Swift ${{ matrix.swift_version }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
