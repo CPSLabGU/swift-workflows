@@ -27,15 +27,15 @@ jobs:
     strategy:
       matrix:
         os: ${{ fromJSON(inputs.os) }}
+        swift: ${{ fromJSON(inputs.swift_versions) }}
         build_mode: ${{ fromJSON(inputs.build_modes) }}
-        swift_version: ${{ fromJSON(inputs.swift_versions) }}
-    name: Swift ${{ matrix.swift_version }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
+    name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: swift-actions/setup-swift@v2
         with:
-          swift-version: ${{ matrix.swift_version }}
+          swift-version: ${{ matrix.swift }}
       #- name: Install guunits
       #  uses: mipalgu/install-guunits@main
 
