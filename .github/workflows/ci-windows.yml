@@ -59,20 +59,20 @@ on:
   workflow_call:
     inputs:
       os:
+        default: '["windows-latest"]'
         description: 'The windows versions to execute the job on'
         required: false
         type: string
-        default: '["windows-latest"]'
       build_modes:
+        default: '["debug", "release"]'
         description: 'The build modes to execute the job on'
         required: false
         type: string
-        default: '["debug", "release"]'
       swift_versions:
+        default: '["6.0", "5.10"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
-        default: '["6.0", "5.10"]'
     secrets:
       SSH_PRIVATE_KEY:
         required: true

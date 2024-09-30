@@ -4,20 +4,20 @@ on:
   workflow_call:
     inputs:
       os:
+        default: '[macos-13, macos-14, macos-latest]'
         description: 'The macOS versions to execute the job on'
         required: false
         type: string
-        default: '[macos-13, macos-14, macos-latest]'
       build_modes:
+        default: '["debug", "release"]'
         description: 'The build modes to execute the job on'
         required: false
         type: string
-        default: '["debug", "release"]'
       swift_versions:
+        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
-        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
     secrets:
       SSH_PRIVATE_KEY:
         required: true
