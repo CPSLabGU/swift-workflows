@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       os:
-        default: '[macos-13, macos-14, macos-latest]'
+        default: '["macos-13", "macos-14", "macos-latest"]'
         description: 'The macOS versions to execute the job on'
         required: false
         type: string
