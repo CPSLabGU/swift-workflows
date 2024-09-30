@@ -81,9 +81,9 @@ jobs:
   build_windows:
     strategy:
       matrix:
-        os: fromJSON('${{ github.event.inputs.os }}')
-        swift: fromJSON('${{ github.event.inputs.swift_versions }}')
-        build_mode: fromJSON('${{ github.event.inputs.build_modes }}')
+        os: ${{ fromJSON(github.event.inputs.os) }}
+        swift: ${{ fromJSON(github.event.inputs.swift_versions) }}
+        build_mode: ${{ fromJSON(github.event.inputs.build_modes) }}
     name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
