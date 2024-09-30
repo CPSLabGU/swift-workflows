@@ -27,10 +27,7 @@ on:
 jobs:
   build_linux:
     strategy:
-      matrix:
-        os: "${{ fromJSON(inputs.os) }}"
-        swift: "${{ fromJSON(inputs.swift_versions) }}"
-        build_mode: "${{ fromJSON(inputs.build_modes) }}"
+      matrix: "{\"os\": ${{ fromJSON(inputs.os) }}, \"swift\": ${{ fromJSON(inputs.swift_versions) }}, \"build_mode\": ${{ fromJSON(inputs.build_modes) }}}"
     name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
