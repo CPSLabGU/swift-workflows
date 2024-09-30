@@ -13,11 +13,11 @@ on:
         description: 'The build modes to execute the job on'
         required: false
         type: string
-      swift_versions:
-        default: '["6.0", "5.10"]'
-        description: 'The swift versions to execute the job on'
-        required: false
-        type: string
+      # swift_versions:
+      #   default: '["6.0", "5.10"]'
+      #   description: 'The swift versions to execute the job on'
+      #   required: false
+      #   type: string
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -27,15 +27,15 @@ jobs:
     strategy:
       matrix:
         os: ${{ fromJSON(inputs.os) }}
-        swift: ${{ fromJSON(inputs.swift_versions) }}
+        # swift: ${{ fromJSON(inputs.swift_versions) }}
         build_mode: ${{ fromJSON(inputs.build_modes) }}
-    name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
+    name: Swift ${{ matrix.build_mode }} CI for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: swift-actions/setup-swift@v2
+      - uses: maxim-lobanov/setup-xcode@v1
         with:
-          swift-version: ${{ matrix.swift }}
+          xcode-version: latest
       #- name: Install guunits
       #  uses: mipalgu/install-guunits@main
 
