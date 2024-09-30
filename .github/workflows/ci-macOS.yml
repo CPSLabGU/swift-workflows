@@ -2,6 +2,22 @@ name: MacOS CI
 
 on:
   workflow_call:
+    inputs:
+      os:
+        description: 'The macOS versions to execute the job on'
+        required: false
+        type: string
+        default: '[macos-13, macos-14, macos-latest]'
+      build_modes:
+        description: 'The build modes to execute the job on'
+        required: false
+        type: string
+        default: '["debug", "release"]'
+      swift_versions:
+        description: 'The swift versions to execute the job on'
+        required: false
+        type: string
+        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -10,15 +26,16 @@ jobs:
   build_macos:
     strategy:
       matrix:
-        os: [macos-13, macos-14, macos-latest]
-        build_mode: ["debug", "release"]
-    name: Swift ${{ matrix.build_mode }} CI for ${{ matrix.os }}
+        os: fromJSON('${{ github.event.inputs.os }}')
+        build_mode: fromJSON('${{ github.event.inputs.build_modes }}')
+        swift_version: fromJSON('${{ github.event.inputs.swift_versions }}')
+    name: Swift ${{ matrix.swift_version }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: maxim-lobanov/setup-xcode@v1
+      - uses: swift-actions/setup-swift@v2
         with:
-          xcode-version: latest
+          swift-version: ${{ matrix.swift_version }}
       #- name: Install guunits
       #  uses: mipalgu/install-guunits@main
 

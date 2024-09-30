@@ -2,6 +2,22 @@ name: Linux CI
 
 on:
   workflow_call:
+    inputs:
+      os:
+        description: 'The linux versions to execute the job on'
+        required: false
+        type: string
+        default: '["ubuntu-latest", "ubuntu-22.04", "ubuntu-20.04"]'
+      build_modes:
+        description: 'The build modes to execute the job on'
+        required: false
+        type: string
+        default: '["debug", "release"]'
+      swift_versions:
+        description: 'The swift versions to execute the job on'
+        required: false
+        type: string
+        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -12,9 +28,9 @@ jobs:
   build_linux:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04]
-        swift: ["6.0", "5.10", "5.9", "5.8", "5.7"]
-        build_mode: ["debug", "release"]
+        os: fromJSON('${{ github.event.inputs.os }}')
+        swift: fromJSON('${{ github.event.inputs.swift_versions }}')
+        build_mode: fromJSON('${{ github.event.inputs.build_modes }}')
     name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
