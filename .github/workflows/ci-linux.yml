@@ -4,20 +4,20 @@ on:
   workflow_call:
     inputs:
       os:
+        default: '["ubuntu-latest", "ubuntu-22.04", "ubuntu-20.04"]'
         description: 'The linux versions to execute the job on'
         required: false
         type: string
-        default: '["ubuntu-latest", "ubuntu-22.04", "ubuntu-20.04"]'
       build_modes:
+        default: '["debug", "release"]'
         description: 'The build modes to execute the job on'
         required: false
         type: string
-        default: '["debug", "release"]'
       swift_versions:
+        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
-        default: '["6.0", "5.10", "5.9", "5.8", "5.7"]'
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -27,7 +27,10 @@ on:
 jobs:
   build_linux:
     strategy:
-      matrix: "{\"os\": ${{ fromJSON(inputs.os) }}, \"swift\": ${{ fromJSON(inputs.swift_versions) }}, \"build_mode\": ${{ fromJSON(inputs.build_modes) }}}"
+      matrix:
+        os: ${{ fromJSON(inputs.os) }}
+        swift: ${{ fromJSON(inputs.swift_versions) }}
+        build_mode: ${{ fromJSON(inputs.build_modes) }}
     name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
