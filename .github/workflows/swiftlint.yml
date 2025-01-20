@@ -28,14 +28,14 @@ jobs:
   swiftformat:
     runs-on: ubuntu-latest
     steps:
-      - uses: slashmo/install-swift@v0.4.0
+      - uses: swift-actions/setup-swift@v2
         with:
-          version: "5.10"
+          swift-version: "6.0"
 
       - name: Install swift-format
         uses: mipalgu/install-swift-format@main
         with:
-          ref: '510.1.0'
+          ref: '600.0.0'
 
       - name: Setup SSH Key
         run: | 

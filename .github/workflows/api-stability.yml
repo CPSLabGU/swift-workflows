@@ -19,9 +19,9 @@ jobs:
 
     steps:
       - if: ${{ runner.os == 'Linux' }}
-        uses: slashmo/install-swift@v0.4.0
+        uses: swift-actions/setup-swift@v2
         with:
-          version: ${{ matrix.swift }}
+          swift-version: ${{ matrix.swift }}
 
       - if: ${{ runner.os == 'macOS' }}
         uses: maxim-lobanov/setup-xcode@v1

@@ -35,9 +35,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: slashmo/install-swift@v0.4.0
+      - uses: swift-actions/setup-swift@v2
         with:
-          version: ${{ matrix.swift }}
+          swift-version: ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
