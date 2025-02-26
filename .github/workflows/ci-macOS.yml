@@ -13,11 +13,11 @@ on:
         description: 'The build modes to execute the job on'
         required: false
         type: string
-      # swift_versions:
-      #   default: '["6.0", "5.10"]'
-      #   description: 'The swift versions to execute the job on'
-      #   required: false
-      #   type: string
+      xcode_version:
+        default: 'latest'
+        description: 'The Xcode version to execute the job on'
+        required: false
+        type: string
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest
+          xcode-version: ${{ inputs.xcode_version }}
       #- name: Install guunits
       #  uses: mipalgu/install-guunits@main
 
