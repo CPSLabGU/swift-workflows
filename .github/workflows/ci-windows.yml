@@ -69,7 +69,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.0.2", "5.10"]'
+        default: '["6.0", "5.10"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
