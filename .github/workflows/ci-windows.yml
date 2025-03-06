@@ -107,10 +107,10 @@ jobs:
       - name: build
         run: |
           swift package purge-cache
-          swift build -c ${{ matrix.build_mode }} -Xswiftc -windows-sdk-version -Xswiftc 10.0.22621.0
+          swift build -c ${{ matrix.build_mode }}
 
       - name: Test
-        run: swift test -c ${{ matrix.build_mode }} -Xswiftc -windows-sdk-version -Xswiftc 10.0.22621.0
+        run: swift test -c ${{ matrix.build_mode }}
   ci-windows-report:
     runs-on: ubuntu-latest
     needs: build_windows
