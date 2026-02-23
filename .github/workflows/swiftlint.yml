@@ -30,12 +30,12 @@ jobs:
     steps:
       - uses: swift-actions/setup-swift@v2
         with:
-          swift-version: "6.0"
+          swift-version: "6.2"
 
       - name: Install swift-format
         uses: mipalgu/install-swift-format@main
         with:
-          ref: '600.0.0'
+          ref: '602.0.0'
 
       - name: Setup SSH Key
         run: | 
