@@ -28,7 +28,7 @@ jobs:
   swiftformat:
     runs-on: ubuntu-latest
     steps:
-      - uses: swift-actions/setup-swift@v2
+      - uses: swift-actions/setup-swift@v3
         with:
           swift-version: "6.3"
 

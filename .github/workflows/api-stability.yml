@@ -12,14 +12,14 @@ jobs:
   build_linux:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-22.04, ubuntu-20.04, macos-latest]
+        os: [ubuntu-latest, ubuntu-24.04, ubuntu-22.04, macos-latest]
         swift: ["6.3", "6.2", "6.1", "6.0"]
     name: Check Swift ${{ matrix.swift }} API Stability on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
       - if: ${{ runner.os == 'Linux' }}
-        uses: swift-actions/setup-swift@v2
+        uses: swift-actions/setup-swift@v3
         with:
           swift-version: ${{ matrix.swift }}
 

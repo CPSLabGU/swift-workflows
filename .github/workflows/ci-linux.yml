@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       os:
-        default: '["ubuntu-latest", "ubuntu-22.04"]'
+        default: '["ubuntu-latest", "ubuntu-24.04", "ubuntu-22.04"]'
         description: 'The linux versions to execute the job on'
         required: false
         type: string
@@ -35,7 +35,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: swift-actions/setup-swift@v2
+      - uses: swift-actions/setup-swift@v3
         with:
           swift-version: ${{ matrix.swift }}
 
