@@ -63,17 +63,19 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          path: 'repo'
       
       #- name: Reconfigure Private Repo URLs
       #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
 
       - name: build
         shell: bash -l ${0}
-        run: swift build -c ${{ matrix.build_mode }}
+        run: cd repo && swift build -c ${{ matrix.build_mode }}
 
       - name: Test
         shell: bash -l ${0}
-        run: swift test -c ${{ matrix.build_mode }}
+        run: cd repo && swift test -c ${{ matrix.build_mode }}
 
   ci-linux-report:
     runs-on: ubuntu-latest
