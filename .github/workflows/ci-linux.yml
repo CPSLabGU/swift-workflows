@@ -14,7 +14,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.2"]'
+        default: '["6.3", "6.2", "6.1", "6.0"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
@@ -35,15 +35,21 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Setup Swift
+      - name: Checkout Swiftenv
+        uses: actions/checkout@v4
+        with:
+          repository: kylef/swiftenv
+          path: .swiftenv
+
+      - name: Setup Swiftenv
         run: |
-          curl -O "https://download.swift.org/swiftly/linux/swiftly-1.1.1-$(uname -m).tar.gz"
-          tar -zxf swiftly-1.1.1-$(uname -m).tar.gz
-          echo "::debug::Initializing swiftly"
-          ./swiftly init --skip-install
-          source /home/runner/.local/share/swiftly/env.sh
-          echo "::debug::Installing Swift ${{ matrix.swift }}"
-          swiftly install --use ${{ matrix.swift }}
+          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> ${{ github.workspace }}/.bash_profile
+          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ${{ github.workspace }}/.bash_profile
+          echo 'eval "$(swiftenv init -)"' >> ${{ github.workspace }}/.bash_profile
+      
+      - name: Install Swift
+        shell: bash -l ${0}
+        run: swiftenv install ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
@@ -62,9 +68,11 @@ jobs:
       #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
 
       - name: build
+        shell: bash -l ${0}
         run: swift build -c ${{ matrix.build_mode }}
 
       - name: Test
+        shell: bash -l ${0}
         run: swift test -c ${{ matrix.build_mode }}
 
   ci-linux-report:
