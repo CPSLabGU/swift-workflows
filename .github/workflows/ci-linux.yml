@@ -41,8 +41,9 @@ jobs:
           tar -zxf swiftly-1.1.1-$(uname -m).tar.gz
           echo "::debug::Initializing swiftly"
           ./swiftly init --skip-install
+          source /home/runner/.local/share/swiftly/env.sh
           echo "::debug::Installing Swift ${{ matrix.swift }}"
-          ./swiftly install --use ${{ matrix.swift }}
+          swiftly install --use ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
