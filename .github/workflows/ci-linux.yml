@@ -39,8 +39,10 @@ jobs:
         run: |
           curl -O "https://download.swift.org/swiftly/linux/swiftly-1.1.1-$(uname -m).tar.gz"
           tar -zxf swiftly-1.1.1-$(uname -m).tar.gz
+          echo "::debug::Initializing swiftly"
           ./swiftly init --skip-install
-          swiftly install --use ${{ matrix.swift }}
+          echo "::debug::Installing Swift ${{ matrix.swift }}"
+          ./swiftly install --use ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
