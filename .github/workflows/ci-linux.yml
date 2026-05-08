@@ -14,7 +14,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.3", "6.2", "6.1", "6.0"]'
+        default: '["6.2"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
