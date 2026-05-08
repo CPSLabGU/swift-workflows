@@ -43,9 +43,9 @@ jobs:
 
       - name: Setup Swiftenv
         run: |
-          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> ${{ github.workspace }}/.bash_profile
-          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ${{ github.workspace }}/.bash_profile
-          echo 'eval "$(swiftenv init -)"' >> ${{ github.workspace }}/.bash_profile
+          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> $HOME/.bash_profile
+          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> $HOME/.bash_profile
+          echo 'eval "$(swiftenv init -)"' >> $HOME/.bash_profile
       
       - name: Install Swift
         shell: bash -l ${0}
