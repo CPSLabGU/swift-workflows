@@ -48,7 +48,7 @@ jobs:
           echo 'eval "$(swiftenv init -)"' >> $HOME/.bash_profile
       
       - name: Install Swift
-        shell: bash -l ${0}
+        shell: bash -l {0}
         run: swiftenv install ${{ matrix.swift }}
 
       - name: Setup SSH Key
@@ -70,11 +70,11 @@ jobs:
       #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
 
       - name: build
-        shell: bash -l ${0}
+        shell: bash -l {0}
         run: cd repo && swift build -c ${{ matrix.build_mode }}
 
       - name: Test
-        shell: bash -l ${0}
+        shell: bash -l {0}
         run: cd repo && swift test -c ${{ matrix.build_mode }}
 
   ci-linux-report:
