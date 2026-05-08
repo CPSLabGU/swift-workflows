@@ -35,9 +35,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: slashmo/install-swift@v0.4.0
-        with:
-          version: ${{ matrix.swift }}
+      - name: Setup Swift
+        run: |
+          curl -O "https://download.swift.org/swiftly/linux/swiftly-1.1.1-$(uname -m).tar.gz"
+          tar -zxf swiftly-1.1.1-$(uname -m).tar.gz
+          ./swiftly init --skip-install
+          swiftly install --use ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
