@@ -14,7 +14,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.3", "6.2"]'
+        default: '["6.3", "6.2", "6.1", "6.0"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
@@ -35,10 +35,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: swift-actions/setup-swift@v3
+      - uses: slashmo/install-swift@v0.4.0
         with:
-          swift-version: ${{ matrix.swift }}
-          skip-verify-signature: true
+          version: ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
