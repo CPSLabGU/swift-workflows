@@ -2,6 +2,17 @@ name: API Stability CI
 
 on:
   workflow_call:
+    inputs:
+      swift_versions:
+        default: '["6.4", "6.3", "6.2"]'
+        description: 'The swift versions to execute the job on'
+        required: false
+        type: string
+      os:
+        default: '["ubuntu-latest", "macos-latest"]'
+        description: 'The OS to execute the job on'
+        required: false
+        type: string
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -12,8 +23,8 @@ jobs:
   build_linux:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04, macos-latest]
-        swift: ["6.4", "6.3", "6.2"]
+        os: ${{ fromJSON(inputs.os) }}
+        swift: ${{ fromJSON(inputs.swift_versions) }}
     name: Check Swift ${{ matrix.swift }} API Stability on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
@@ -29,9 +40,13 @@ jobs:
           swiftly install --assume-yes ${{ matrix.swift }}
 
       - if: ${{ runner.os == 'macOS' }}
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest
+        run: |
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg && \
+            installer -pkg swiftly.pkg -target CurrentUserHomeDirectory && \
+            ~/.swiftly/bin/swiftly init --quiet-shell-followup --assume-yes --skip-install && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh" && \
+            hash -r
+          swiftly install --assume-yes ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
