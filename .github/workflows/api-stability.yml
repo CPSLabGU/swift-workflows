@@ -19,9 +19,14 @@ jobs:
 
     steps:
       - if: ${{ runner.os == 'Linux' }}
-        uses: swift-actions/setup-swift@v3
-        with:
-          swift-version: ${{ matrix.swift }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install libcurl4-openssl-dev
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+            tar zxf swiftly-$(uname -m).tar.gz && \
+            ./swiftly init --quiet-shell-followup --assume-yes --skip-install && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+            hash -r
+          swiftly install --assume-yes ${{ matrix.swift }}
 
       - if: ${{ runner.os == 'macOS' }}
         uses: maxim-lobanov/setup-xcode@v1

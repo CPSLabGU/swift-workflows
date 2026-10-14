@@ -34,21 +34,14 @@ jobs:
   swiftformat:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Swiftenv
-        uses: actions/checkout@v4
-        with:
-          repository: kylef/swiftenv
-          path: .swiftenv
-
-      - name: Setup Swiftenv
-        run: |
-          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> $HOME/.bash_profile
-          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> $HOME/.bash_profile
-          echo 'eval "$(swiftenv init -)"' >> $HOME/.bash_profile
-      
       - name: Install Swift
-        shell: bash -l {0}
-        run: swiftenv install 6.4
+        run: |
+          sudo apt-get update && sudo apt-get -y install libcurl4-openssl-dev
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+            tar zxf swiftly-$(uname -m).tar.gz && \
+            ./swiftly init --quiet-shell-followup --assume-yes && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+            hash -r
 
       - name: Setup SSH Key
         run: | 
@@ -64,7 +57,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: SwiftFormat
-        shell: bash -l {0}
         run: swift format lint -rs --configuration ${{ inputs.format_config_path }} Sources Tests
   
   swiftlint-report:
