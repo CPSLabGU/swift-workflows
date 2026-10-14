@@ -12,8 +12,8 @@ jobs:
   build_linux:
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04, ubuntu-22.04, macos-latest]
-        swift: ["6.3", "6.2", "6.1", "6.0"]
+        os: [ubuntu-latest, ubuntu-24.04, macos-latest]
+        swift: ["6.4", "6.3", "6.2"]
     name: Check Swift ${{ matrix.swift }} API Stability on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 

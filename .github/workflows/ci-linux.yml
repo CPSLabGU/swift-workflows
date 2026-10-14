@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       os:
-        default: '["ubuntu-latest", "ubuntu-24.04", "ubuntu-22.04"]'
+        default: '["ubuntu-latest", "ubuntu-24.04"]'
         description: 'The linux versions to execute the job on'
         required: false
         type: string
@@ -14,7 +14,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.3", "6.2", "6.1", "6.0"]'
+        default: '["6.4", "6.3", "6.2"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string

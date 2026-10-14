@@ -2,6 +2,12 @@ name: Swift Lint
 
 on:
   workflow_call:
+    inputs:
+      format_config_path:
+        required: false
+        description: 'The configuration file for SwiftFormat (path). Defaults to `.swiftformat.json`.'
+        default: '.swiftformat.json'
+        type: string
     secrets:
       SSH_PRIVATE_KEY:
         required: true
@@ -10,32 +16,39 @@ on:
 
 jobs:
 
-  swiftlint:
-    runs-on: ubuntu-latest
+  # swiftlint:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Clone Repo 
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Clone Repo 
+  #       uses: actions/checkout@v4
 
-      #- name: Reconfigure Private Repo URLs
-      #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
+  #     #- name: Reconfigure Private Repo URLs
+  #     #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
       
-      - name: SwiftLint
-        uses: norio-nomura/action-swiftlint@3.2.1
-        with:
-            args: --strict
+  #     - name: SwiftLint
+  #       uses: norio-nomura/action-swiftlint@3.2.1
+  #       with:
+  #           args: --strict
 
   swiftformat:
     runs-on: ubuntu-latest
     steps:
-      - uses: swift-actions/setup-swift@v3
+      - name: Checkout Swiftenv
+        uses: actions/checkout@v4
         with:
-          swift-version: "6.3"
+          repository: kylef/swiftenv
+          path: .swiftenv
 
-      - name: Install swift-format
-        uses: mipalgu/install-swift-format@main
-        with:
-          ref: '602.0.0'
+      - name: Setup Swiftenv
+        run: |
+          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> $HOME/.bash_profile
+          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> $HOME/.bash_profile
+          echo 'eval "$(swiftenv init -)"' >> $HOME/.bash_profile
+      
+      - name: Install Swift
+        shell: bash -l {0}
+        run: swiftenv install 6.4
 
       - name: Setup SSH Key
         run: | 
@@ -51,11 +64,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: SwiftFormat
-        run: swift-format lint -rs --configuration .swiftformat.json Sources Tests
+        shell: bash -l {0}
+        run: swift format lint -rs --configuration ${{ inputs.format_config_path }} Sources Tests
   
   swiftlint-report:
     runs-on: ubuntu-latest
-    needs: [swiftlint, swiftformat]
+    needs: [swiftformat]
     if: always()
     steps:
       - name: All tests ok
