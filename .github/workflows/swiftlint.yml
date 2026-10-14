@@ -5,8 +5,8 @@ on:
     inputs:
       format_config_path:
         required: false
-        description: 'The configuration file for SwiftFormat (path). Defaults to `.swiftformat.json`.'
-        default: '.swiftformat.json'
+        description: 'The configuration file for SwiftFormat (path). Defaults to `.swift-format`.'
+        default: '.swift-format'
         type: string
     secrets:
       SSH_PRIVATE_KEY:
