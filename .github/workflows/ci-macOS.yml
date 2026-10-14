@@ -14,7 +14,7 @@ on:
         required: false
         type: string
       swift_versions:
-        default: '["6.4", "6.3", "6.2"]'
+        default: '["6.4"]'
         description: 'The swift versions to execute the job on'
         required: false
         type: string
@@ -29,7 +29,7 @@ jobs:
         os: ${{ fromJSON(inputs.os) }}
         swift: ${{ fromJSON(inputs.swift_versions) }}
         build_mode: ${{ fromJSON(inputs.build_modes) }}
-    name: Swift ${{ matrix.build_mode }} CI for ${{ matrix.os }}
+    name: Swift ${{ matrix.swift }} ${{ matrix.build_mode }} CI for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     steps:
