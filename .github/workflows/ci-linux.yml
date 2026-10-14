@@ -35,21 +35,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout Swiftenv
-        uses: actions/checkout@v4
-        with:
-          repository: kylef/swiftenv
-          path: .swiftenv
-
-      - name: Setup Swiftenv
-        run: |
-          echo 'export SWIFTENV_ROOT="${{ github.workspace }}/.swiftenv"' >> $HOME/.bash_profile
-          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> $HOME/.bash_profile
-          echo 'eval "$(swiftenv init -)"' >> $HOME/.bash_profile
-      
       - name: Install Swift
-        shell: bash -l {0}
-        run: swiftenv install ${{ matrix.swift }}
+        run: |
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+            tar zxf swiftly-$(uname -m).tar.gz && \
+            ./swiftly init --quiet-shell-followup --assume-yes --skip-install && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+            hash -r
+          swiftly install --assume-yes ${{ matrix.swift }}
 
       - name: Setup SSH Key
         run: | 
