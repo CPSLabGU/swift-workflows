@@ -1,0 +1,90 @@
+name: Build Release Artifacts
+
+on:
+  workflow_call:
+    inputs:
+      swift_version:
+        default: "6.4"
+        description: 'The swift version to execute the job on'
+        required: false
+        type: string
+      os:
+        default: '["ubuntu-latest", "ubuntu-26.04-arm", "macos-latest", "macos-26-intel", "windows-latest", "windows-11-arm"]'
+        description: 'The OS to execute the job on'
+        required: false
+        type: string
+      release_artifacts:
+        description: 'An array of paths representing each release artifact to upload.'
+        type: string
+        required: true
+      name:
+        description: 'The name of the archive.'
+        type: string
+        default: ${{ github.event.repository.name }}
+        required: false
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+      SSH_PUBLIC_KEY:
+        required: true
+
+jobs:
+  build_archives:
+    strategy:
+      matrix:
+        os: ${{ fromJSON(inputs.os) }}
+    name: Build Release Artifact on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt-get update && sudo apt-get -y install libcurl4-openssl-dev
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+            tar zxf swiftly-$(uname -m).tar.gz && \
+            ./swiftly init --quiet-shell-followup --assume-yes --skip-install && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+            hash -r
+          swiftly install --assume-yes ${{ inputs.swift_version }}
+
+      - if: ${{ runner.os == 'macOS' }}
+        run: |
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg && \
+            installer -pkg swiftly.pkg -target CurrentUserHomeDirectory && \
+            ~/.swiftly/bin/swiftly init --quiet-shell-followup --assume-yes --skip-install && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh" && \
+            hash -r
+          swiftly install --assume-yes ${{ inputs.swift_version }}
+    
+      - if: ${{ runner.os == 'Windows' }}
+        uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: '${{ inputs.swift_version }}'
+
+      - name: Setup SSH Key
+        run: | 
+          rm -rf ~/.ssh
+          mkdir -m 0700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_ed25519.pub
+          chmod 0600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_ed25519
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      
+      #- name: Reconfigure Private Repo URLs
+      #  run: sed -i 's/git@github.com:/https:\/\/${{ secrets.ACCESS_TOKEN }}@github.com\//g' Package.swift
+
+      - name: Compile Binaries 
+        run: swift build -c release
+    
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.name }}_${{ runner.os }}_${{ runner.arch }}
+          path: ${{ inputs.release_artifacts }}
