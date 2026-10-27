@@ -9,7 +9,7 @@ on:
         required: false
         type: string
       os:
-        default: '["ubuntu-latest", "ubuntu-26.04-arm", "macos-latest", "macos-26-intel", "windows-latest", "windows-11-arm"]'
+        default: '["ubuntu-latest", "ubuntu-24.04-arm", "macos-latest", "macos-26-intel", "windows-latest", "windows-11-arm"]'
         description: 'The OS to execute the job on'
         required: false
         type: string
