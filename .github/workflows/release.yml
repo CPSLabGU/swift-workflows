@@ -96,3 +96,4 @@ jobs:
         with:
           name: ${{ inputs.name }}_${{ runner.os }}_${{ runner.arch }}
           path: ${{ inputs.release_artifacts }}
+          include-hidden-files: true
