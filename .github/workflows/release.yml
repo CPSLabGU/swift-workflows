@@ -61,7 +61,7 @@ jobs:
         with:
           swift-version: '${{ inputs.swift_version }}'
 
-      - if: ${{ runner.os != 'Windows' }}
+      - if: ${{ runner.os == 'Linux' }}
         name: Setup SSH Key
         run: | 
           rm -rf ~/.ssh
@@ -72,7 +72,7 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ed25519
 
-      - if: ${{ runner.os == 'Windows' }}
+      - if: ${{ runner.os != 'Linux' }}
         name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.9.0
         with:
