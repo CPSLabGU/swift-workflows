@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       swift_version:
-        default: "6.4"
+        default: "latest"
         description: 'The swift version to execute the job on'
         required: false
         type: string
